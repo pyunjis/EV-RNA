@@ -1,0 +1,109 @@
+{
+    "__default__" :
+    {
+        "t" : "35:00:00",
+        "N" : 1,
+        "partition" : "exacloud",
+        "J" : "{rule}.{wildcards}",
+        "o" : "logs/__default__/{wildcards}_{rule}%j.out",
+        "e" : "logs/__default__/{wildcards}_{rule}%j.err",
+        "c" : 4,
+        "mem" : 45000
+    },
+    "fastqc" :
+    {
+        "J" : "fastqc",
+        "e" : "logs/fastqc/fastqc_%j.err",
+        "o" : "logs/fastqc/fastqc_%j.out",
+        "c" : 6,
+        "mem":40000
+    },
+    "fastqscreen" :
+    {
+        "J" : "fastqscreen",
+        "e" : "logs/fastqscreen/fastqscreen_%j.err",
+        "o" : "logs/fastqscreen/fastqscreen_%j.out",
+        "c" : 6,
+        "mem":40000
+    },
+    "multiqc" :
+    {
+        "J" : "multiqc",
+        "e" : "logs/multiqc/multiqc_%j.err",
+        "o" : "logs/multiqc/multiqc_%j.out",
+        "c" : 4,
+        "mem":40000
+    },
+    "STAR" :
+    {
+        "J" : "STAR",
+        "e" : "logs/STAR/STAR%j.err",
+        "o" : "logs/STAR/STAR%j.out",
+        "c" : 12,
+        "mem" : 64000
+    },
+     "htseq" :
+    {
+        "J" : "htseq",
+        "e" : "logs/htseq/htseq%j.err",
+        "o" : "logs/htseq/htseq%j.out",
+        "c" : 1,
+        "mem" : 54000
+    },
+    "star_statistics" :
+    {
+        "J" : "star_statistics",
+        "e" : "logs/star_statistics/star_statistics_%j.err",
+        "o" : "logs/star_statistics/star_statistics_%j.out",
+        "c" : 1,
+        "mem":5000
+    },
+    "compile_counts" :
+    {
+        "J" : "compile_counts",
+        "e" : "logs/compile_counts/compile_counts_%j.err",
+        "o" : "logs/compile_counts/compile_counts_%j.out",
+        "c" : 1,
+        "mem":10000
+    },
+    "read_distribution" :
+    {
+        "J" : "read_distribution",
+        "e" : "logs/read_distribution/read_distribution_%j.err",
+        "o" : "logs/read_distribution/read_distribution_%j.out",
+        "c" : 1,
+        "mem":10000
+    },
+    "compile_rd" :
+    {
+        "J" : "compile_rd",
+        "e" : "logs/compile_rd/compile_rd%j.err",
+        "o" : "logs/compile_rd/compile_rd%j.out",
+        "c" : 1,
+        "mem" : 1000
+    },
+    "bowtie2" :
+    {
+        "J" : "bowtie2",
+        "e" : "logs/bowtie2/bowtie2%j.err",
+        "o" : "logs/bowtie2/bowtie2%j.out",
+        "c" : 2,
+        "mem" : 45000
+    },
+     "count_miRNA" :
+    {
+        "J" : "count_miRNA",
+        "e" : "logs/count_miRNA/count_miRNA%j.err",
+        "o" : "logs/count_miRNA/count_miRNA%j.out",
+        "c" : 1,
+        "mem" : 54000
+    },
+     "sort_bowtie2" :
+    {
+        "J" : "sort_bowtie2",
+        "e" : "logs/sort_bowtie2/sort_bowtie2%j.err",
+        "o" : "logs/sort_bowtie2/sort_bowtie2%j.out",
+        "c" : 1,
+        "mem" : 54000
+    }
+}

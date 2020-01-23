@@ -1,0 +1,24 @@
+name: fastq_env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - fastqc=0.11.8=1
+  - font-ttf-dejavu-sans-mono=2.37=h6964260_0
+  - fontconfig=2.13.1=h86ecdb6_1001
+  - freetype=2.10.0=he983fc9_1
+  - icu=64.2=he1b5a44_0
+  - libgcc-ng=9.1.0=hdf63c60_0
+  - libiconv=1.15=h516909a_1005
+  - libpng=1.6.37=hed695b0_0
+  - libstdcxx-ng=9.1.0=hdf63c60_0
+  - libuuid=2.32.1=h14c3975_1000
+  - libxml2=2.9.9=hee79883_2
+  - openjdk=11.0.1=h516909a_1016
+  - perl=5.26.2=h516909a_1006
+  - xz=5.2.4=h14c3975_1001
+  - zlib=1.2.11=h516909a_1005
+prefix: /home/users/khyu/Miniconda3/envs/fastq_env
+

@@ -1,0 +1,21 @@
+gtf_file:
+  /home/groups/CEDAR/anno/gtf/hg38_ens94_ERCC.gtf
+TE_gtf:
+  /home/groups/CEDAR/anno/gtf/hg38_rmsk_TE.gtf
+bed_file:
+  /home/groups/CEDAR/anno/gtf/hg38_ens94.chr.bed
+star_index:
+  /home/groups/CEDAR/anno/indices/star/hg38_ERCC/
+conf:
+  /home/groups/CEDAR/tools/FastQ_Screen_Genomes/fastq_screen.conf
+star_tool:
+  /home/exacloud/lustre1/CEDAR/tools/STAR/tags/2.5.3a/bin/Linux_x86_64/STAR
+TE_baseline:
+  E
+omic_meta_data:
+  /home/groups/CEDAR/khyu/analysis/EV-RNA/samples/metadata/metadata_20191021.txt
+linear_model:
+  Condition
+project_id:
+  LIB20191101TN
+
