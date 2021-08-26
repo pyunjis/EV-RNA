@@ -66,20 +66,7 @@ rule all:
         expand("samples/fastqscreen/200421/{sample}/{sample}_{ext}_screen.{fastqscreen_ext}", sample=SAMPLES, ext=ext, fastqscreen_ext=fastqscreen_ext),
         "results/tables/{project_id}_read_coverage.txt".format(project_id=config["project_id"]),
         "results/tables/{project_id}_tag_counts.txt".format(project_id=config["project_id"]),
-        #expand("samples/miRNA_count/{sample}_featureCount_miRNA_count.txt", sample = SAMPLES),
-        #expand("samples/star_miRNA/{sample}_bam/Aligned.out.sam", sample = SAMPLES),
-        #expand("samples/star_miRNA_mature/{sample}_bam/Aligned.out.sam", sample = SAMPLES),
-        #expand("samples/star_miRNA_hairpin/{sample}_bam/Aligned.out.sam", sample = SAMPLES),
-        #expand("samples/hsa_miRNA_count/{sample}_featureCount_miRNA_count.txt", sample = SAMPLES),
-        #expand("results/tables/{project_id}_miRNA_STAR_mapping_statistics.txt", project_id = config['project_id']),
-        #expand("results/tables/{project_id}_mature_miRNA_STAR_mapping_statistics.txt", project_id = config['project_id']),
-        #expand("results/tables/{project_id}_hairpin_miRNA_STAR_mapping_statistics.txt", project_id = config['project_id'])
-        expand("samples/star_TE/{sample}/Aligned.out.bam", sample = SAMPLES),
-        expand("results/TEtranscripts/{condition}.cntTable", condition = CONDITIONS)
-
-
 
 include: "rules/align_rmdp.smk"
-include: "rules/miRNA.smk"
 
 
