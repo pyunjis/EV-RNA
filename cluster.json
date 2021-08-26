@@ -39,7 +39,7 @@
         "J" : "STAR",
         "e" : "logs/STAR/STAR%j.err",
         "o" : "logs/STAR/STAR%j.out",
-        "c" : 12,
+        "c" : 24,
         "mem" : 64000
     },
      "htseq" :
@@ -79,6 +79,14 @@
         "J" : "compile_rd",
         "e" : "logs/compile_rd/compile_rd%j.err",
         "o" : "logs/compile_rd/compile_rd%j.out",
+        "c" : 1,
+        "mem" : 1000
+    },
+    "compile_rd_tagcounts" :
+    {
+        "J" : "compile_rd_tagcounts",
+        "e" : "logs/compile_rd_tagcounts/compile_rd_tagcounts%j.err",
+        "o" : "logs/compile_rd_tagcounts/compile_rd_tagcounts%j.out",
         "c" : 1,
         "mem" : 1000
     },

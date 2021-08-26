@@ -11,11 +11,11 @@ conf:
 star_tool:
   /home/exacloud/lustre1/CEDAR/tools/STAR/tags/2.5.3a/bin/Linux_x86_64/STAR
 TE_baseline:
-  E
+  HD
 omic_meta_data:
-  /home/groups/CEDAR/khyu/analysis/EV-RNA/samples/metadata/metadata_20191021.txt
+  /home/groups/CEDAR/khyu/analysis/EV-RNA/samples/metadata/metadata_20200421.txt
 linear_model:
   Condition
 project_id:
-  LIB20191101TN
+  NOVO20200421AK_newhtseq
 
