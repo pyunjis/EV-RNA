@@ -68,6 +68,28 @@ rule STAR:
                 --twopassMode Basic
                 """)
 
+rule index:
+    input:
+        "samples/star/200421/{sample}_bam/Aligned.sortedByCoord.out.bam"
+    output:
+        "samples/star/200421/{sample}_bam/Aligned.sortedByCoord.out.bam.bai"
+    conda:
+        "../envs/gen_bigwig.yaml"
+    shell:
+        """samtools index {input} {output}"""
+
+
+rule create_bigwig:
+    input:
+        bam = "samples/star/200421/{sample}_bam/Aligned.sortedByCoord.out.bam",
+        bai = "samples/star/200421/{sample}_bam/Aligned.sortedByCoord.out.bam.bai"
+    output:
+        "samples/bigwig/200421/{sample}.bw"
+    conda:
+        "../envs/gen_bigwig.yaml"
+    shell:
+        """bamCoverage -b {input.bam} -o {output}"""
+
 
 rule star_statistics:
     input:
