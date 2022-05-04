@@ -1,0 +1,9 @@
+name: gen_bigwig
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - deeptools=3.5.1
+  - samtools=1.15.1
+
