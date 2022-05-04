@@ -62,6 +62,7 @@ rule all:
     input:
         expand("results/tables/{project_id}_STAR_mapping_statistics.txt", project_id = config['project_id']),
         "results/multiqc/{project_id}_multiqc.html".format(project_id=config["project_id"]),
+        expand("samples/bigwig/200421/{sample}.bw", sample=SAMPLES),
         "data/{project_id}_counts.txt".format(project_id=config["project_id"]),
         expand("samples/fastqscreen/200421/{sample}/{sample}_{ext}_screen.{fastqscreen_ext}", sample=SAMPLES, ext=ext, fastqscreen_ext=fastqscreen_ext),
         "results/tables/{project_id}_read_coverage.txt".format(project_id=config["project_id"]),
