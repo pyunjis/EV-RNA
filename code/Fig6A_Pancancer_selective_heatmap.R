@@ -1,4 +1,4 @@
-# Figure 5B Selective packaging heatmap
+# Figure 6A Selective packaging heatmap
 
 # Load library
 library(DESeq2)
@@ -10,7 +10,7 @@ library(reshape2)
 library(RColorBrewer)
 
 # Set working directory
-setwd("E:/Box drive update/4. EV-RNA/4. Code/2022-02-17 V7/")
+setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
 # cts <- read.table("./df/2022-01-27/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
@@ -35,7 +35,7 @@ keep <- rownames(cts)[rownames(cts) %in% genes]
 cts <- cts[keep,] 
 
 
-cluster_heatmap <- function(Target, Baseline){
+
   # Load DESeq2 results for each fraction
   Target1= "LG"
   Baseline = "HD"
@@ -627,10 +627,9 @@ cluster_heatmap <- function(Target, Baseline){
     grid::grid.draw(x$gtable)
     dev.off()
   }
-  write.table(test3, file=paste0("./Files/gene_list_protein_coding_unnorm_deseq_norm_HDvspancancer_cluster_up.txt",sep=""), sep="\t", quote=F) 
-  save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Selective packaging heatmap/Figure5B_protein_coding_pancancer.pdf"))
+  #write.table(test3, file=paste0("./Files/gene_list_protein_coding_unnorm_deseq_norm_HDvspancancer_cluster_up.txt",sep=""), sep="\t", quote=F) 
+  save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Figure_6A_protein_coding_pancancer.pdf"))
  
-}
-cluster_heatmap(Target1= "LG", Target2 = "MM", Target3 = "LV", Baseline = "HD")
+
 #cluster_heatmap(Target= "LV", Baseline ="HD")
 #cluster_heatmap(Target= "MM", Baseline ="HD")

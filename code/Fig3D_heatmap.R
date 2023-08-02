@@ -8,7 +8,8 @@ library(gplots)
 library(dplyr)
 
 # Set working directory 
-setwd("E:/Box drive update/4. EV-RNA/4. Code/2022-02-17 V7/")
+setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
+
 # Define tables to read-in
 set4df <- read.table("Files/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
                      check.names = FALSE)

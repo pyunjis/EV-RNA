@@ -12,7 +12,7 @@ library(tidyverse)
 library(gplots)
 
 # Set working directory
-setwd("E:/Box drive update/4. EV-RNA/4. Code/2022-02-17 V7/")
+setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
 ALL_cluster <- read.table("./Files/degpatterns/cluster_groups_FDR0.05_degpatterns_ALL_FR_minc0.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
@@ -108,7 +108,7 @@ RunHeatmap_top10 <- function(cluster, type, norm){
                            border_color=NA,
                            annotation_row = df
   )
-  pdf(paste0("./Figures/Figure3E_DEGpattern_top10_heatmap_ALL_color_no_cluster_minc0.pdf"), 6, 4)
+  pdf(paste0("./Figures/Figure_3E_DEGpattern_top10_heatmap_ALL_color_no_cluster_minc0.pdf"), 6, 4)
   print(clusterHeat1)
   dev.off()
   

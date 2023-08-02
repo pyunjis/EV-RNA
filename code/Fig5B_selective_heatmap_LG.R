@@ -10,7 +10,7 @@ library(reshape2)
 library(RColorBrewer)
 
 # Set working directory
-setwd("E:/Box drive update/4. EV-RNA/4. Code/2022-02-17 V7/")
+setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
 # cts <- read.table("./df/2022-01-27/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
@@ -340,19 +340,9 @@ cluster_heatmap <- function(Target, Baseline){
     grid::grid.draw(x$gtable)
     dev.off()
   }
-  write.table(test3, file=paste0("./Files/gene_list_protein_coding_unnorm_deseq_norm_HDvs", Target, "_cluster_up.txt",sep=""), sep="\t", quote=F) 
-  write.table(plot_order2, file=paste0("./Files/plot_order_HDvs", Target, "_cluster_up.txt",sep=""), sep="\t", quote=F) 
-  save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Selective packaging heatmap/Figure5B_protein_coding_", Target, "_", Baseline, ".pdf"))
-  
-  # obtain zscore values for scaled expression
-  scale_rows = function(x){
-    m = apply(x, 1, mean, na.rm = T)
-    s = apply(x, 1, sd, na.rm = T)
-    return((x - m) / s)
-  }
-  
-  zscores <- scale_rows(plot_order2)
-  write.table(zscores, file=paste0("./Files/zscore_HDvs", Target, "_cluster_up.txt",sep=""), sep="\t", quote=F) 
+  #write.table(test3, file=paste0("./Files/gene_list_protein_coding_unnorm_deseq_norm_HDvs", Target, "_cluster_up.txt",sep=""), sep="\t", quote=F) 
+  save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Figure_5B_protein_coding_", Target, "_", Baseline, ".pdf"))
+ 
 }
 cluster_heatmap(Target= "LG", Baseline ="HD")
 #cluster_heatmap(Target= "LV", Baseline ="HD")

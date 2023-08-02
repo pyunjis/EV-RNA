@@ -1,4 +1,4 @@
-# Figure 2E biotype
+# Figure 2E biotype, 2C Table
 library(ggplot2)
 library(RColorBrewer)
 library(reshape2)
@@ -7,7 +7,7 @@ library(data.table)
 library(grid)
 
 # Set working directory
-setwd("E:/Box drive update/4. EV-RNA/4. Code/2022-02-17 V7/")
+setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
 anno <- get(load("Files/hg38.Ens_94.biomaRt.geneAnno.Rdata"))
@@ -39,6 +39,8 @@ filtered <- filtered[,keep]  # no log2 counts
 ################################################
 # Annotation of biotypes for gene counts
 ################################################
+# Replace underscore with blank for anno
+anno$gene_biotype <- gsub("_", " ", anno$gene_biotype)
 
 # Remove unique gene identifiers from counts table
 fD <- as.data.frame(rownames(filtered))
@@ -69,8 +71,8 @@ geneTable <- geneTable[geneTable$value>0,] # values with count
 # Let's filter out some biotypes so that we don't have such a messy graph
 ordered <- as.data.table(geneTable)[, .N, by = biotype][order(-N)]
 # Grab the first 6 options
-filtBio <- as.vector(ordered[6:1,]$biotype) # 6 types: Processed_transcript, transcribed_unprocessed_pseudogene, lincRNA, processed_pseudogene, lincRNA, antisesnse, protein_coding
-other <- as.vector(ordered[7:nrow(ordered)]$biotype) # 21 others
+filtBio <- as.vector(ordered[5:1,]$biotype) # 6 types, # 6 types: Processed_transcript, transcribed_unprocessed_pseudogene, lincRNA, processed_pseudogene, lincRNA, antisesnse, protein_coding
+other <- as.vector(ordered[6:nrow(ordered)]$biotype) # 21 others
 
 # Filter for top 6 biotypes of interest
 # Assign all biotypes that are not in the top 6 to be defined as "other"
@@ -115,13 +117,13 @@ biotypeBar2
 
 # Mean, min, and max of each biotype
 protein_coding <- geneTable %>%
-  filter(biotype == "protein_coding")
+  filter(biotype == "protein coding")
 trans_pseudo <- geneTable %>%
-  filter(biotype == "transcribed_unprocessed_pseudogene")
-process_trans <- geneTable %>%
-  filter(biotype == "processed_transcript")
+  filter(biotype == "transcribed unprocessed pseudogene")
+# process_trans <- geneTable %>%
+#   filter(biotype == "processed transcript")
 process_pseudo <- geneTable %>%
-  filter(biotype == "processed_pseudogene")
+  filter(biotype == "processed pseudogene")
 lincRNA <- geneTable %>%
   filter(biotype == "lincRNA")
 antisense <- geneTable %>%
@@ -132,19 +134,18 @@ other <- geneTable %>%
 mean(protein_coding$Frac)
 min(protein_coding$Frac)
 max(protein_coding$Frac)
-sd(protein_coding$Frac)
 
 mean(trans_pseudo$Frac)
 min(trans_pseudo$Frac)
 max(trans_pseudo$Frac)
 
-mean(process_trans$Frac)
-min(process_trans$Frac)
-max(process_trans$Frac)
-
-mean(trans_pseudo$Frac)
-min(trans_pseudo$Frac)
-max(trans_pseudo$Frac)
+# mean(process_trans$Frac)
+# min(process_trans$Frac)
+# max(process_trans$Frac)
+# 
+# mean(trans_pseudo$Frac)
+# min(trans_pseudo$Frac)
+# max(trans_pseudo$Frac)
 
 mean(process_pseudo$Frac)
 min(process_pseudo$Frac)
@@ -163,9 +164,10 @@ min(other$Frac)
 max(other$Frac)
 
 
-pdf("Figures/Figure_2E_biotypes.pdf",width = 40, height = 10)
+pdf("Figures/Figure_2E_biotypes.pdf", width = 40, height = 10)
 
 
-#jpeg("Figures/Figure_2E_biotypes.jpg", width = 4000, height = 1000)
+#jpeg("Figures/Figure_2C_biotypes.jpg", width = 4000, height = 1000)
 print(biotypeBar2)
 dev.off()
+
