@@ -40,14 +40,11 @@ print("------------- Below is the Tukey's from raw CT ------------------")
     target = "ALB"
     data2 <- data %>%
     filter(Target_name == target)
-    # ymax <- max(-(data$CT))
-    # ymax <- as.numeric(ymax)
     ymax <- -18.79
     stat.test <- aov(-CT~Pulldown, data=data2) %>%
       tukey_hsd()
     plot_ALB_2 <- ggplot(data2, aes(x = Pulldown, y = -CT)) +
       geom_boxplot(aes(group = Pulldown), fill = "white", color = color, outlier.shape = NA) +
-      # geom_point() +
       stat_pvalue_manual(
         stat.test, label= "p.adj.signif",
         y.position = c((ymax + 0.4*ymax), (ymax + 0.3*ymax),  NA)) +
@@ -64,14 +61,11 @@ print("------------- Below is the Tukey's from raw CT ------------------")
     target = "B2M"
     data2 <- data %>%
       filter(Target_name == target)
-    # ymax <- max(-(data$CT))
-    # ymax <- as.numeric(ymax)
     ymax <- -18.79
     stat.test <- aov(-CT~Pulldown, data=data2) %>%
       tukey_hsd()
     plot_B2M_2 <- ggplot(data2, aes(x = Pulldown, y = -CT)) +
       geom_boxplot(aes(group = Pulldown), fill = "white", color = color) +
-      # geom_point() +
       stat_pvalue_manual(
         stat.test, label= "p.adj.signif",
         y.position = c((ymax + 0.2*ymax), (ymax + 0.1*ymax),  NA)) +
@@ -88,14 +82,11 @@ print("------------- Below is the Tukey's from raw CT ------------------")
     target = "CORO1C"
     data2 <- data %>%
       filter(Target_name == target)
-    # ymax <- max(-(data$CT))
-    # ymax <- as.numeric(ymax)
     ymax <- -18.79
     stat.test <- aov(-CT~Pulldown, data=data2) %>%
       tukey_hsd()
     plot_CORO1C_2 <- ggplot(data2, aes(x = Pulldown, y = -CT)) +
       geom_boxplot(aes(group = Pulldown), fill = "white", color = color) +
-      # geom_point() +
       stat_pvalue_manual(
         stat.test, label= "p.adj.signif",
         y.position = c((ymax + 0.26*ymax), (ymax + 0.18*ymax),  NA)) +
@@ -112,14 +103,11 @@ print("------------- Below is the Tukey's from raw CT ------------------")
     target = "RPS6"
     data2 <- data %>%
       filter(Target_name == target)
-    # ymax <- max(-(data$CT))
-    # ymax <- as.numeric(ymax)
     ymax <- -18.79
     stat.test <- aov(-CT~Pulldown, data=data2) %>%
       tukey_hsd()
     plot_RPS6_2 <- ggplot(data2, aes(x = Pulldown, y = -CT)) +
       geom_boxplot(aes(group = Pulldown), fill = "white", color = color, outlier.shape = NA) +
-      # geom_point() +
       stat_pvalue_manual(
         stat.test, label= "p.adj.signif",
         y.position = c((ymax + 0.32*ymax), (ymax + 0.18*ymax),  NA)) +
