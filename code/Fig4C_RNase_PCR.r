@@ -1,4 +1,4 @@
-# Figure_4B_Triton_RNase_Tukeys Revised
+# Figure_4B_Triton_RNase_Tukeys 
 
 #loading library
 {
@@ -36,14 +36,12 @@ cts2 <- cts %>%
 #All 4 genes plotted at once using facet
 {
 data <- cts2 %>%
-  #filter(sample == "S1" | sample == "S2FR" | sample == "S1FRS2") %>%
   filter(target_name %in% c("ALB", "B2M", "CORO1C", "RPS6"))
 plot_colors <- c("black", "black")
 color <- "white"
 Figure_4C <- ggplot(data, aes(x = sample_name, y = -ct, group = sample, color = sample)) +
   geom_boxplot(aes(group = sample_name), linewidth =0.5, fill = color) +
   geom_line(aes(y = -avg_ct, group = sample, color = sample), alpha =0.5) +
-  # geom_point(data = data, aes(x=sample_name, y=-ctcorr, color = sample), size = 1) +
   scale_color_manual(values = plot_colors) +
   facet_rep_grid(target_name ~ ., scales= "free_y") +
   ylab("raw -ct") +
@@ -60,8 +58,6 @@ theme(axis.text.y = element_text(size = 12),
       panel.border = element_rect(linewidth = 1.25, fill = NA))
 
 }
-
-
 
 pdf("Figures/Figure_4C_Triton_RNase.pdf", width =6, height = 12)
 print(Figure_4C)

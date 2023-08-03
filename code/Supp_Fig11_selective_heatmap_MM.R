@@ -13,9 +13,6 @@ library(RColorBrewer)
 setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
-# cts <- read.table("./df/2022-01-27/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
-#                   check.names = FALSE) # Was normalized using 11609:11664
-
 cts <- read.table("./Files/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
                   check.names = FALSE)
 
@@ -160,7 +157,6 @@ cluster_heatmap <- function(Target, Baseline){
   
   # Re-order the SampleID for biological replicates to be together within fraction
   md_3 <- md2
-  #md_3 <- md_3 %>% filter(Condition %in% c("HD", type))
   md_3$Condition_FR <- factor(md_3$Condition_FR, levels = c(HD_levels, CX_levels))
   md_3 <- md_3 %>% arrange(Condition_FR)
   rownames(md_3) <- md_3$SampleID
@@ -185,18 +181,14 @@ cluster_heatmap <- function(Target, Baseline){
   names(cluster) <- sub("^", "Cluster_", seq(1,6))
   
   # Specify colour scheme
-  #ann_colors = list(Cluster = cluster, Fraction = fractionCols, Condition = conditionCols)
   ann_colors = list(Fraction = fractionCols, Condition = conditionCols)
  
   # Heatmap without any cluster
   breaks <- seq(-3.5, 3.5, by =0.1)
   clusterHeat <- pheatmap(plot1, show_rownames=F, 
                           breaks = breaks,
-                          #annotation_row = my_gene_col,
                           annotation_names_row = TRUE,
                           annotation_names_col = FALSE,
-                          #annotation_colors = ann_colors,
-                          #cluster_rows = FALSE, 
                           cluster_cols = FALSE,
                           redgreen(70),
                           annotation_col = md_4, 
@@ -213,9 +205,8 @@ cluster_heatmap <- function(Target, Baseline){
     dev.off()
   }
   
-  #save_pheatmap_pdf(clusterHeat, paste0("./Heatmap/2021-10-19/Figure_4C_ournorm_protein_coding_", Target, "_", Baseline, ".pdf"))
-  
-  # New - Assign cluster by order of DE identified
+
+  # Assign cluster by order of DE identified
   md_4 <- md_3[,c(1,3)]
   
   ## Generate proper color scheme for heatmap
@@ -227,11 +218,8 @@ cluster_heatmap <- function(Target, Baseline){
   conditionCols <- cols[cols$Group %in% c("HD",Target),]$Colour
   names(conditionCols) <- cols[cols$Group %in% c("HD",Target),]$Group
   
-  ### annotation of gene clusters for pheatmap
-  # cluster <- brewer.pal(6, "Set1")
-  # names(cluster) <- sub("^", "Cluster_", seq(1,6))
   
-  # New * add annotation for fraction DE genes identified
+  # Add annotation for fraction DE genes identified
   FR14_DE <- brewer.pal(6, "Set1")[1]
   names(FR14_DE) <- list("FR14")
   FR58_DE <- brewer.pal(6, "Set1")[2]
@@ -246,7 +234,6 @@ cluster_heatmap <- function(Target, Baseline){
   # names(FR3033_DE) <- list("FR3033")
   
   # Specify colour scheme
-  #ann_colors = list(Cluster = cluster, Fraction = fractionCols, Condition = conditionCols)
   ann_colors = list(FR14_DE = FR14_DE, FR58_DE = FR58_DE, FR912_DE = FR912_DE, FR1619_DE = FR1619_DE, FR2326_DE = FR2326_DE, Fraction = fractionCols, Condition = conditionCols)
   
   # Let's add column of fraction DE genes identified
@@ -282,19 +269,7 @@ cluster_heatmap <- function(Target, Baseline){
   iv <- match(test$gene, pos_list$FR2326$gene)
   test$FR2326_DE <- pos_list$FR2326[iv,]$Fraction
   
-  # iv <- match(test$gene, pos_list$FR3033$gene)
-  # test$FR3033_DE <- pos_list$FR3033[iv,]$Fraction
-  
-  
-  # test order of least shared to most shared
-  #test3 <- test2 
-  #test4 <- order(test3, na.last=FALSE)
-  #test5 <- test3[test4,]
-  
-  
-  test2 <- test
-  rownames(test2)<- test2$gene 
-  test2$gene <- NULL
+
   
   # Arrange genes with the order of fraction identified (i.e. FR14_DE first)
   # LG has all fractions
@@ -302,15 +277,9 @@ cluster_heatmap <- function(Target, Baseline){
   # LV doesn't have fraction 1619_DE, 2326_DE, 3033_DE
   test3 <- test %>%
     arrange(FR14_DE, FR58_DE, FR912_DE, FR1619_DE, FR2326_DE)
-  # test3_MM <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE, FR1619_DE, FR2326_DE)
-  # test3_LV <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE)
-  # test3 <- test2 %>%
-  #   arrange(FR3033_DE, FR2326_DE, FR1619_DE, FR912_DE, FR58_DE, FR14_DE)
+ 
 
   gene_level <- test3$gene 
-  #test2$gene <- factor(test2$gene, levels = unique(test2$gene))
   plot_order2 <- plot1[gene_level,]
 
   
@@ -319,7 +288,6 @@ cluster_heatmap <- function(Target, Baseline){
   
   clusterHeat2 <- pheatmap(plot_order2, show_rownames=F, 
                           breaks = breaks,
-                          #annotation_row = my_gene_col,
                           annotation_row = test3,
                           annotation_names_row = TRUE,
                           annotation_names_col = FALSE,
@@ -344,6 +312,5 @@ cluster_heatmap <- function(Target, Baseline){
   save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Supp_Figure_11A_protein_coding_", Target, "_", Baseline, ".pdf"))
  
 }
-#cluster_heatmap(Target= "LG", Baseline ="HD")
-#cluster_heatmap(Target= "LV", Baseline ="HD")
+
 cluster_heatmap(Target= "MM", Baseline ="HD")

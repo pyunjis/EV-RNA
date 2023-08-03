@@ -15,7 +15,6 @@ mito <- 0
 
 ##----------load counts------------#
 print("Loading counts table")
-#print(countsFile)
 
 counts <- read.table("set1df_unnorm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
                      check.names = FALSE)
@@ -25,7 +24,6 @@ print(annoFile)
 
 if(strsplit(biotypes, split='\\,')[[1]]!=""){
   anno.sub <- anno[paste(anno$gene_biotype) %in% strsplit(biotypes, split='\\,')[[1]] ,]
-  #counts.sub <- counts[paste(counts$Genes) %in% unique(paste(anno.sub$external_gene_name)) , ]
   counts.sub <- counts[paste(rownames(counts)) %in% unique(paste(anno.sub$ensembl_gene_id)) , ]
 }else{
   print("no biotypes provided")

@@ -19,7 +19,6 @@ cols <- read.delim("Files/colors.txt", stringsAsFactors = F)
 rownames(md) <- md$SampleID
 
 # Remove low quality samples EV065 and EV066
-#set4df = set4df[, -which(names(set4df) %in% c("EV065","EV066"))]
 md <- md[ -which(md$SampleID %in% c("EV065","EV066")),]
 
 # Remove precancer types
@@ -62,7 +61,7 @@ md <- md[,c(2,4)]
 fractionCols <- brewer.pal(length(unique(md$Fraction)), "Set1")
 names(fractionCols) <- unique(md$Fraction)
 
-## Remove precancer types or not
+## Keep for cancer types
 cols <- filter(cols, Group == "HD" | Group == "LG" | Group == "LV" | Group == "MM")
 conditionCols <- cols$Colour
 

@@ -210,7 +210,4 @@ pdf("Figures/Supp_Figure_5C_Intron_Fraction.pdf", width =9, height = 3)
 print(p2)
 dev.off()
 
-# Intergenic
-#pdf("Figures/Supp_Figure_3D_Intergenic_Fraction.pdf", width =9, height = 4)
-#print(p1)
-#dev.off()
+

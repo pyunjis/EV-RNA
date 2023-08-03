@@ -176,7 +176,6 @@ print("Plotting particle size distribution as a histogram for Supplemental Figur
 
 #plotting unnormalized particle size counts together
 segm <- hist_dat %>% 
-  #filter(Fraction == "FR12") %>%
   ggplot(., aes(x=Size, fill=Fraction, color = Fraction)) +
   geom_histogram(binwidth=5, position="identity", alpha = 0.4) +
   facet_grid(Fraction~.) +
@@ -209,9 +208,7 @@ norm$Fraction <- factor(norm$Fraction, levels = c("FR4", "FR6", "FR8", "FR10", "
 
 #plotting normalized histogram
 seg <- norm %>% 
-  # filter(Fraction == "FR12") %>%
   ggplot(., aes(x=Size, y=Norm, fill=Fraction, color=Fraction)) +
-  # ggplot(., aes(x=Size, y=Norm, color="#000000")) +
   geom_bar(stat="identity", alpha =0.4, color = "darkgrey", fill = "darkgrey") +
   facet_grid(Fraction~.) +
   xlim(c(15,400)) +

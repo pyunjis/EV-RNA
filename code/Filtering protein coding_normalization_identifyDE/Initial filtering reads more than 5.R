@@ -16,7 +16,8 @@ library(RColorBrewer)
 # Set working directory 
 
 setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
-# Define tables to read-in for 2ml
+
+# Define tables to read-in 
 cts <- read.table("./Files/NOVO20200421AK_counts.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
                   check.names = FALSE)
 

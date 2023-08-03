@@ -13,9 +13,6 @@ library(RColorBrewer)
 setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
 # Import Data
-# cts <- read.table("./df/2022-01-27/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
-#                   check.names = FALSE) # Was normalized using 11609:11664
-
 cts <- read.table("./Files/set1df_unnorm_protein_coding_deseq_norm.txt", header = TRUE, stringsAsFactors = FALSE, sep = "\t",
                   check.names = FALSE)
 
@@ -33,8 +30,6 @@ length(spikes) #55
 # Filter to include only genes
 keep <- rownames(cts)[rownames(cts) %in% genes]
 cts <- cts[keep,] 
-
-
 
   # Load DESeq2 results for each fraction
   Target1= "LG"
@@ -128,14 +123,9 @@ cts <- cts[keep,]
   idx <- Reduce(union, lapply(neg_list, rownames))
   cts_neg <- cts[idx, ]
   
-  # Filter md
-  # md <- dplyr::filter(md, Condition == "HD" | Condition == Target)
-  # rownames(md) <- md$SampleID
+  # Duplicate md
   md2 <- md
-  # 
-  # # For LV065 & LV066 need to be removed
-  # md2 <- filter(md2, !SampleID %in% c("EV065", "EV066"))
-  # rownames(md2) <- md2$SampleID
+
   
   # keep only relevant SampleID in your count table
   filtered <- cts_pos
@@ -221,6 +211,7 @@ cts <- cts[keep,]
     filter(Fraction == "FR14", Condition == "LV")
   cts_LV_FR14$HD_mean <- cts_HD_FR14$HD_mean
   cts_LV_FR14$delta <- cts_LV_FR14$log2counts - cts_HD_FR14$HD_mean
+ 
   #For FR58
   cts_HD_FR58 <- cts_MM %>%
     filter(Fraction == "FR58", Condition == "HD") %>%
@@ -231,6 +222,7 @@ cts <- cts[keep,]
     filter(Fraction == "FR58", Condition == "LV")
   cts_LV_FR58$HD_mean <- cts_HD_FR58$HD_mean
   cts_LV_FR58$delta <- cts_LV_FR58$log2counts - cts_HD_FR58$HD_mean
+  
   #For FR912
   cts_HD_FR912 <- cts_MM %>%
     filter(Fraction == "FR912", Condition == "HD") %>%
@@ -241,6 +233,7 @@ cts <- cts[keep,]
     filter(Fraction == "FR912", Condition == "LV")
   cts_LV_FR912$HD_mean <- cts_HD_FR912$HD_mean
   cts_LV_FR912$delta <- cts_LV_FR912$log2counts - cts_HD_FR912$HD_mean
+  
   #For FR1619
   cts_HD_FR1619 <- cts_MM %>%
     filter(Fraction == "FR1619", Condition == "HD") %>%
@@ -262,24 +255,22 @@ cts <- cts[keep,]
   cts_LV_FR2326 <- cts_MM %>%
     filter(Fraction == "FR2326", Condition == "LV")
   
-  # This is where error occurs
+  # Group by gene and sampleID
   test <- cts_HD_FR2326 %>% 
     group_by(gene, SampleID) %>% 
     arrange(gene, SampleID)
   
-  # updated code contains slice instead of top_n(4)
   # test
   test2 <- test %>%
     arrange(gene) %>%
     group_by(gene) %>% 
     dplyr::slice(1:4)
-  # test2 <- test %>% group_by(gene, HD_mean) %>% top_n(4)
   cts_HD_FR2326 <- test2 %>% arrange(gene, SampleID)
   cts_LV_FR2326 <- cts_LV_FR2326 %>% arrange(gene, SampleID)
-  #above this fixes the error
   
   cts_LV_FR2326$HD_mean <- cts_HD_FR2326$HD_mean
   cts_LV_FR2326$delta <- cts_LV_FR2326$log2counts - cts_HD_FR2326$HD_mean
+ 
   #For FR3033
   cts_HD_FR3033 <- cts_MM %>%
     filter(Fraction == "FR3033", Condition == "HD") %>%
@@ -288,15 +279,15 @@ cts <- cts[keep,]
     mutate(delta = log2counts-HD_mean)
   cts_LV_FR3033 <- cts_MM %>%
     filter(Fraction == "FR3033", Condition == "LV")
-  #same fix as above code, (because this was the second sample omitted)
   test <- cts_HD_FR3033 %>% group_by(gene, SampleID) %>% arrange(gene, SampleID)
+  
   # updated code contains slice instead of top_n(4)
   # test
   test2 <- test %>%
     arrange(gene) %>%
     group_by(gene) %>% 
     dplyr::slice(1:4)
-  #test2 <- test %>% group_by(gene) %>% top_n(4)
+
   cts_HD_FR3033 <- test2 %>% arrange(gene, SampleID)
   cts_LV_FR3033 <- cts_LV_FR3033 %>% arrange(gene, SampleID)
   cts_LV_FR3033$HD_mean <- cts_HD_FR3033$HD_mean
@@ -337,7 +328,6 @@ cts <- cts[keep,]
   
   # Re-order the SampleID for biological replicates to be together within fraction
   md_3 <- md2
-  #md_3 <- md_3 %>% filter(Condition %in% c("HD", type))
   md_3$Condition_FR <- factor(md_3$Condition_FR, levels = c(HD_levels, LG_levels, MM_levels, LV_levels))
   md_3 <- md_3 %>% arrange(Condition_FR)
   rownames(md_3) <- md_3$SampleID
@@ -362,18 +352,14 @@ cts <- cts[keep,]
   names(cluster) <- sub("^", "Cluster_", seq(1,6))
   
   # Specify colour scheme
-  #ann_colors = list(Cluster = cluster, Fraction = fractionCols, Condition = conditionCols)
   ann_colors = list(Fraction = fractionCols, Condition = conditionCols)
  
   # Heatmap without any cluster
   breaks <- seq(-3.5, 3.5, by =0.1)
   clusterHeat <- pheatmap(plot1, show_rownames=F, 
                           breaks = breaks,
-                          #annotation_row = my_gene_col,
                           annotation_names_row = TRUE,
                           annotation_names_col = FALSE,
-                          #annotation_colors = ann_colors,
-                          #cluster_rows = FALSE, 
                           cluster_cols = FALSE,
                           redgreen(70),
                           annotation_col = md_4, 
@@ -390,7 +376,6 @@ cts <- cts[keep,]
     dev.off()
   }
   
-  #save_pheatmap_pdf(clusterHeat, paste0("./Heatmap/2021-10-19/Figure_4C_ournorm_protein_coding_", Target, "_", Baseline, ".pdf"))
   
   # New - Assign cluster by order of DE identified
   md_4 <- md_3[,c(1,3)]
@@ -405,14 +390,6 @@ cts <- cts[keep,]
   names(conditionCols) <- cols[cols$Group %in% c("HD",Target1, Target2, Target3),]$Group
   
   ### annotation of gene clusters for pheatmap
-  # cluster <- brewer.pal(6, "Set1")
-  # names(cluster) <- sub("^", "Cluster_", seq(1,6))
-  
-  # New * add annotation for fraction DE genes identified
-  # 
-  # FR14_DE <- "#0c2c84"
-  # names(FR14_DE) <- list("FR14_DE")
-                    
   LG_FR14_DE <- "#0c2c84"
   names(LG_FR14_DE) <- list("FR14")
   LG_FR58_DE <- "#225ea8"
@@ -443,46 +420,13 @@ cts <- cts[keep,]
   names(LV_FR58_DE) <- list("FR58")
   LV_FR912_DE <- "#fff7bc"
   names(LV_FR912_DE) <- list("FR912")
-  
-  # MM_FR14_DE <- "#7a0177"
-  # names(MM_FR14_DE) <- list("MM_FR14_DE")
-  # MM_FR58_DE <- "#c51b8a"
-  # names(MM_FR58_DE) <- list("MM_FR58_DE")
-  # MM_FR912_DE <- "#f768a1"
-  # names(MM_FR912_DE) <- list("MM_FR912_DE")
-  # MM_FR1619_DE <- "#fbb4b9"
-  # names(MM_FR1619_DE) <- list("MM_FR1619_DE")
-  # MM_FR2326_DE <- "#feebe2"
-  # names(MM_FR2326_DE) <- list("MM_FR2326_DE")
-  # 
-  # LV_FR14_DE <- "#d95f0e"
-  # names(LV_FR14_DE) <- list("LV_FR14_DE")
-  # LV_FR58_DE <- "#fec44f"
-  # names(LV_FR58_DE) <- list("LV_FR58_DE")
-  # LV_FR912_DE <- "#fff7bc"
-  # names(LV_FR912_DE) <- list("LV_FR912_DE")
-  
  
-                    
-  # FR14_DE <- brewer.pal(6, "Set1")[1]
-  # names(FR14_DE) <- list("FR14")
-  # FR58_DE <- brewer.pal(6, "Set1")[2]
-  # names(FR58_DE) <- list("FR58")
-  # FR912_DE <- brewer.pal(6, "Set1")[3]
-  # names(FR912_DE) <- list("FR912")
-  # FR1619_DE <- brewer.pal(6, "Set1")[4]
-  # names(FR1619_DE) <- list("FR1619")
-  # FR2326_DE <- brewer.pal(6, "Set1")[5]
-  # names(FR2326_DE) <- list("FR2326")
-  # FR3033_DE <- brewer.pal(6, "Set1")[6]
-  # names(FR3033_DE) <- list("FR3033")
   
   # Specify colour scheme
-  #ann_colors = list(Cluster = cluster, Fraction = fractionCols, Condition = conditionCols)
-  #ann_colors = list(FR14_DE = FR14_DE, FR58_DE = FR58_DE, FR912_DE = FR912_DE, FR1619_DE = FR1619_DE, FR2326_DE = FR2326_DE, FR3033_DE = FR3033_DE, Fraction = fractionCols, Condition = conditionCols)
   ann_colors = list(LG_FR14_DE = LG_FR14_DE, LG_FR58_DE = LG_FR58_DE, LG_FR912_DE = LG_FR912_DE, LG_FR1619_DE = LG_FR1619_DE, LG_FR2326_DE = LG_FR2326_DE, LG_FR3033_DE = LG_FR3033_DE,
                     MM_FR14_DE = MM_FR14_DE, MM_FR58_DE = MM_FR58_DE, MM_FR912_DE = MM_FR912_DE, MM_FR1619_DE = MM_FR1619_DE, MM_FR2326_DE = MM_FR2326_DE, 
                     LV_FR14_DE = LV_FR14_DE, LV_FR58_DE = LV_FR58_DE, LV_FR912_DE = LV_FR912_DE, Fraction = fractionCols, Condition = conditionCols)
+
   # Let's add column of fraction DE genes identified
   # need to make a data frame with a gene in one column
   gene_df <- plot1
@@ -572,15 +516,6 @@ cts <- cts[keep,]
   test$LV_FR3033_DE <- pos_list$LV_FR3033[iv,]$Fraction
   
   # test order of least shared to most shared
-  #test3 <- test2 
-  #test4 <- order(test3, na.last=FALSE)
-  #test5 <- test3[test4,]
-  
-  
-  test2 <- test
-  rownames(test2)<- test2$gene 
-  test2$gene <- NULL
-  
   # Arrange genes with the order of fraction identified (i.e. FR14_DE first)
   # LG has all fractions
   # MM doesn't have fraction 3033_DE
@@ -589,15 +524,8 @@ cts <- cts[keep,]
     arrange(LG_FR14_DE, LG_FR58_DE, LG_FR912_DE, LG_FR1619_DE, LG_FR2326_DE, LG_FR3033_DE,
             MM_FR14_DE, MM_FR58_DE, MM_FR912_DE, MM_FR1619_DE, MM_FR2326_DE,
             LV_FR14_DE, LV_FR58_DE, LV_FR912_DE)
-  # test3_MM <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE, FR1619_DE, FR2326_DE)
-  # test3_LV <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE)
-  # test3 <- test2 %>%
-  #   arrange(FR3033_DE, FR2326_DE, FR1619_DE, FR912_DE, FR58_DE, FR14_DE)
 
   gene_level <- test3$gene 
-  #test2$gene <- factor(test2$gene, levels = unique(test2$gene))
   plot_order2 <- plot1[gene_level,]
 
   
@@ -606,7 +534,6 @@ cts <- cts[keep,]
   
   clusterHeat2 <- pheatmap(plot_order2, show_rownames=F, 
                           breaks = breaks,
-                          #annotation_row = my_gene_col,
                           annotation_row = test3,
                           annotation_names_row = TRUE,
                           annotation_names_col = TRUE,
@@ -630,6 +557,3 @@ cts <- cts[keep,]
   #write.table(test3, file=paste0("./Files/gene_list_protein_coding_unnorm_deseq_norm_HDvspancancer_cluster_up.txt",sep=""), sep="\t", quote=F) 
   save_pheatmap_pdf(clusterHeat2, paste0("./Figures/Figure_6A_protein_coding_pancancer.pdf"))
  
-
-#cluster_heatmap(Target= "LV", Baseline ="HD")
-#cluster_heatmap(Target= "MM", Baseline ="HD")

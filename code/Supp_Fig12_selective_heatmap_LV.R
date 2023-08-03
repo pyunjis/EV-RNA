@@ -135,6 +135,7 @@ cluster_heatmap <- function(Target, Baseline){
     filter(Fraction == "FR14", Condition == type2)
   cts_MM_FR14$HD_mean <- cts_HD_FR14$HD_mean
   cts_MM_FR14$delta <- cts_MM_FR14$log2counts - cts_HD_FR14$HD_mean
+  
   #For FR58
   cts_HD_FR58 <- cts_MM %>%
     filter(Fraction == "FR58", Condition == "HD") %>%
@@ -145,16 +146,18 @@ cluster_heatmap <- function(Target, Baseline){
     filter(Fraction == "FR58", Condition == type2)
   cts_MM_FR58$HD_mean <- cts_HD_FR58$HD_mean
   cts_MM_FR58$delta <- cts_MM_FR58$log2counts - cts_HD_FR58$HD_mean
+  
   #For FR912
   cts_HD_FR912 <- cts_MM %>%
     filter(Fraction == "FR912", Condition == "HD") %>%
     group_by(gene, Condition_FR) %>%
-    mutate(HD_mean = mean(log2counts)) %>% # was originally median instead of mean
+    mutate(HD_mean = mean(log2counts)) %>% 
     mutate(delta = log2counts-HD_mean)
   cts_MM_FR912 <- cts_MM %>%
     filter(Fraction == "FR912", Condition == type2)
   cts_MM_FR912$HD_mean <- cts_HD_FR912$HD_mean
   cts_MM_FR912$delta <- cts_MM_FR912$log2counts - cts_HD_FR912$HD_mean
+ 
   #For FR1619
   cts_HD_FR1619 <- cts_MM %>%
     filter(Fraction == "FR1619", Condition == "HD") %>%
@@ -176,7 +179,7 @@ cluster_heatmap <- function(Target, Baseline){
   cts_MM_FR2326 <- cts_MM %>%
     filter(Fraction == "FR2326", Condition == type2)
   
-  # This is where error occurs
+  # group by gene and sampleID
   test <- cts_HD_FR2326 %>% 
     group_by(gene, SampleID) %>% 
     arrange(gene, SampleID)
@@ -187,13 +190,13 @@ cluster_heatmap <- function(Target, Baseline){
     arrange(gene) %>%
     group_by(gene) %>% 
     dplyr::slice(1:4)
-  # test2 <- test %>% group_by(gene, HD_mean) %>% top_n(4)
+
   cts_HD_FR2326 <- test2 %>% arrange(gene, SampleID)
   cts_MM_FR2326 <- cts_MM_FR2326 %>% arrange(gene, SampleID)
-  #above this fixes the error
 
   cts_MM_FR2326$HD_mean <- cts_HD_FR2326$HD_mean
   cts_MM_FR2326$delta <- cts_MM_FR2326$log2counts - cts_HD_FR2326$HD_mean
+ 
   #For FR3033
   cts_HD_FR3033 <- cts_MM %>%
     filter(Fraction == "FR3033", Condition == "HD") %>%
@@ -202,22 +205,23 @@ cluster_heatmap <- function(Target, Baseline){
     mutate(delta = log2counts-HD_mean)
   cts_MM_FR3033 <- cts_MM %>%
     filter(Fraction == "FR3033", Condition == type2)
-  #same fix as above code, (because this was the second sample omitted)
+  
   test <- cts_HD_FR3033 %>% group_by(gene, SampleID) %>% arrange(gene, SampleID)
+  
   # updated code contains slice instead of top_n(4)
   # test
   test2 <- test %>%
     arrange(gene) %>%
     group_by(gene) %>% 
     dplyr::slice(1:4)
-  #test2 <- test %>% group_by(gene) %>% top_n(4)
+ 
   cts_HD_FR3033 <- test2 %>% arrange(gene, SampleID)
   cts_MM_FR3033 <- cts_MM_FR3033 %>% arrange(gene, SampleID)
   cts_MM_FR3033$HD_mean <- cts_HD_FR3033$HD_mean
   cts_MM_FR3033$delta <- cts_MM_FR3033$log2counts - cts_HD_FR3033$HD_mean
   
   
-  #test, regenerate correct HD 2326 and 3033
+  # test, regenerate correct HD 2326 and 3033
   cts_HD_FR2326 <- cts_MM %>%
     filter(Fraction == "FR2326", Condition == "HD") %>%
     group_by(gene, Condition_FR) %>%
@@ -229,7 +233,7 @@ cluster_heatmap <- function(Target, Baseline){
     mutate(HD_mean = mean(log2counts)) %>%
     mutate(delta = log2counts-HD_mean)
   
-  #combine all sub-dataframes with delta
+  # combine all sub-dataframes with delta
   delta <- bind_rows(cts_HD_FR14, cts_HD_FR58, cts_HD_FR912, cts_HD_FR1619, cts_HD_FR2326, cts_HD_FR3033, cts_MM_FR14, cts_MM_FR58, cts_MM_FR912, cts_MM_FR1619, cts_MM_FR2326, cts_MM_FR3033)
   delta2 <- delta[,c(1,2,9)]
   
@@ -239,14 +243,13 @@ cluster_heatmap <- function(Target, Baseline){
   datac$gene <- NULL
   
   # Re-order the SampleID for biological replicates to be together within fraction
-  #reordering the rows in the heatmap (HD/LG FR14->58->912, etc)
+  # reordering the rows in the heatmap (HD/LG FR14->58->912, etc)
   md_3 <- md2
-  #md_3$SampleID <- rownames(md_3)
   md_3 <- md_3 %>% filter(Condition %in% c("HD", type2))
   md_3$Condition_FR <- factor(md_3$Condition_FR, levels = c("HD_FR14", "HD_FR58", "HD_FR912", "HD_FR1619", "HD_FR2326", "HD_FR3033", "LV_FR14",  "LV_FR58","LV_FR912", "LV_FR1619", "LV_FR2326", "LV_FR3033"))
   md_3 <- md_3 %>% arrange(Condition_FR)
+ 
   #added to remove the same EV ID from this MD
-  #md_3 <- filter(md_3, !SampleID %in% c("EV065", "EV066"))
   rownames(md_3) <- md_3$SampleID
   md_3$SampleID <- NULL
   ordered_list<- rownames(md_3)
@@ -276,11 +279,8 @@ cluster_heatmap <- function(Target, Baseline){
   breaks <- seq(-3.5, 3.5, by =0.1)
   clusterHeat <- pheatmap(plot1, show_rownames=F, 
                           breaks = breaks,
-                          #annotation_row = my_gene_col,
                           annotation_names_row = TRUE,
                           annotation_names_col = FALSE,
-                          #annotation_colors = ann_colors,
-                          #cluster_rows = FALSE, 
                           cluster_cols = FALSE,
                           redgreen(70),
                           annotation_col = md_4, 
@@ -297,10 +297,8 @@ cluster_heatmap <- function(Target, Baseline){
     dev.off()
   }
   
-  #save_pheatmap_pdf(clusterHeat, paste0("./Heatmap/2021-10-19/Figure_4C_unnorm_protein_coding_", Target, "_", Baseline, ".pdf"))
   
-  
-  # New - Assign cluster by order of DE identified
+  # Assign cluster by order of DE identified
   md_4 <- md_3[,c(1,3)]
   
   ## Generate proper color scheme for heatmap
@@ -313,7 +311,7 @@ cluster_heatmap <- function(Target, Baseline){
   names(conditionCols) <- cols[cols$Group %in% c("HD",Target),]$Group
   
   ### annotation of gene clusters for pheatmap
-  # New * add annotation for fraction DE genes identified
+  # Add annotation for fraction DE genes identified
   FR14_DE <- brewer.pal(6, "Set1")[1]
   names(FR14_DE) <- list("FR14")
   FR58_DE <- brewer.pal(6, "Set1")[2]
@@ -328,7 +326,6 @@ cluster_heatmap <- function(Target, Baseline){
   # names(FR3033_DE) <- list("FR3033")
   
   # Specify colour scheme
-  #ann_colors = list(Cluster = cluster, Fraction = fractionCols, Condition = conditionCols)
   ann_colors = list(FR14_DE = FR14_DE, FR58_DE = FR58_DE, FR912_DE = FR912_DE, Fraction = fractionCols, Condition = conditionCols)
   
   # Let's add column of fraction DE genes identified
@@ -366,17 +363,8 @@ cluster_heatmap <- function(Target, Baseline){
   # 
   # iv <- match(test$gene, pos_list$FR3033$gene)
   # test$FR3033_DE <- pos_list$FR3033[iv,]$Fraction
-  # 
-  
-  # test order of least shared to most shared
-  #test3 <- test2 
-  #test4 <- order(test3, na.last=FALSE)
-  #test5 <- test3[test4,]
   
   
-  test2 <- test
-  rownames(test2)<- test2$gene 
-  test2$gene <- NULL
   
   # Arrange genes with the order of fraction identified (i.e. FR14_DE first)
   # LG has all fractions
@@ -384,24 +372,15 @@ cluster_heatmap <- function(Target, Baseline){
   # LV doesn't have fraction 1619_DE, 2326_DE, 3033_DE
   test3 <- test %>%
     arrange(FR14_DE, FR58_DE, FR912_DE)
-  # test3_MM <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE, FR1619_DE, FR2326_DE)
-  # test3_LV <- test %>%
-  #   arrange(FR14_DE, FR58_DE, FR912_DE)
-  # test3 <- test2 %>%
-  #   arrange(FR3033_DE, FR2326_DE, FR1619_DE, FR912_DE, FR58_DE, FR14_DE)
-  
+ 
   gene_level <- test3$gene 
-  #test2$gene <- factor(test2$gene, levels = unique(test2$gene))
   plot_order2 <- plot1[gene_level,]
-  
   
   rownames(test3) <- test3$gene
   test3$gene <- NULL 
   
   clusterHeat2 <- pheatmap(plot_order2, show_rownames=F, 
                            breaks = breaks,
-                           #annotation_row = my_gene_col,
                            annotation_row = test3,
                            annotation_names_row = TRUE,
                            annotation_names_col = FALSE,

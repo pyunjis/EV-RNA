@@ -26,6 +26,7 @@ data_breaks <- data.frame(start = c(0, 4, 8, 15, 22, 29),  # Create data with br
                           end = c(4, 8, 12, 19, 26, 33),
                           FR_ranges = c("FR14", "FR58", "FR912", "FR1619", "FR2326", "FR3033"))
 data_breaks$FR_ranges <- factor(data_breaks$FR_ranges, levels = c("FR14", "FR58", "FR912", "FR1619", "FR2326", "FR3033"))
+
 #visual scaling factor to plot both graphs on 1 plot
 scaleFactor <- 89000000000 / max(Qnano_tidy$A280)
 

@@ -95,11 +95,9 @@ ctsMelt$Fraction <- md[iv,]$Fraction
 # plotting median expression for all detected genes
 a <- ggplot(ctsMelt, aes(x=SampleID, y=log2counts, fill=Fraction)) +
   geom_bar(stat="summary",fun = "median", colour="black", size =0.1, show.legend = FALSE) +
-  #geom_boxplot(alpha=0.7, coef=0, fill = colors[d]) +
   ylab("log2(counts+1)") +
-  #xlab("SampleID") +
   scale_fill_brewer( palette = "Set1" ) +
-  theme(#text = element_text(family = "Arial"),
+  theme(
     plot.margin = unit(c(0.3,0.3,0.3,0.3),"cm"),
     axis.text.x=element_text(angle = 90, size = 5),
     axis.text.y=element_text(size=16),
@@ -150,34 +148,18 @@ min(FR3033$log2counts)
 max(FR3033$log2counts)
 
 # count how many genes detected with log2expression higher than 10
-length(unique(FR14$SampleID)) #20
-length(unique(FR58$SampleID)) #20
-length(unique(FR912$SampleID)) #20
-length(unique(FR1619$SampleID)) #20
-length(unique(FR2326$SampleID)) #19
-length(unique(FR3033$SampleID)) #19
+length(unique(FR14$SampleID)) 
+length(unique(FR58$SampleID)) 
+length(unique(FR912$SampleID)) 
+length(unique(FR1619$SampleID)) 
+length(unique(FR2326$SampleID)) 
+length(unique(FR3033$SampleID)) 
 sum(FR14$log2counts > 10) /20
 sum(FR58$log2counts > 10) /20
 sum(FR912$log2counts > 10) /20
 sum(FR1619$log2counts > 10) /19
 sum(FR2326$log2counts > 10) /19
 sum(FR3033$log2counts > 10) /19
-
-# plotting median expression of all detected genes
-# ggplot(ctsMelt, aes(x=SampleID, y=log2counts)) +
-#   geom_boxplot(alpha=0.7, outlier.shape = NA, coef=0, fill = colors[d]) +
-#   #stat_summary(fun=median, geom="point", shape=21, size=2, color="black", fill=colors[d]) +
-#   theme(legend.position="none") +
-#   scale_fill_brewer(palette="Set1") +
-#   ylim(-3,15) +
-#   #geom_hline(yintercept=0, color= "grey50")+
-#   #ylab("RLE") +
-#   #ggtitle("RLE of unnormalized ERCC count") +
-#   theme(panel.grid.major = element_line(colour = "white", size = 1)) +
-#   theme(plot.title = element_text(hjust = 0.5)) +
-#   theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
-#   theme(strip.background = element_rect(colour = "grey50", fill = "grey50")) +
-#   theme(text = element_text(size=15), axis.text.x = element_text(angle=90, hjust=1)) 
 
 # Create set 2 for unnorm_ercc
 set2 <- newSeqExpressionSet(as.matrix(unnorm_ercc), phenoData = md)
@@ -203,8 +185,6 @@ pdf("./Figures/Supp_Figure_6B_Norm_RLE.pdf", width = 5, height =5)
 plotRLE(set1, col=colors[d], legend=TRUE, outline=FALSE, ylim=c(-2, 6), ylab ="RLE",
         cex.axis =1.3, cex.lab =1.5, cex.main =2, whisklty = 0, staplelty = 0)
 dev.off()
-
-#las = 2 makes text x-axis rotate 90.
 
 # plotRLE with new order
 pdf("./Figures/Supp_Figure_6C_Unnorm_ERCC.pdf", width = 5, height =5)

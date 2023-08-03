@@ -9,12 +9,6 @@ library(ggplot2)
 # set working directory
 setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
 
-# set_LG <- c("FR3033", "FR2326", "FR1619","FR912", "FR58", "FR14")
-# set_LV <- c("FR912", "FR58", "FR14")
-# set_MM <- c("FR2326", "FR1619","FR912", "FR58", "FR14")
-
-
-
 
 Upset_plot <- function(target, WIDTH){
 
@@ -62,32 +56,21 @@ Upset_plot <- function(target, WIDTH){
   names <- c("FR14","FR58","FR912","FR1619","FR2326", "FR3033")
   for (i in 1:(length(types))) {
     baseline <- types[i]
-    #cname <- paste0(types[1])
     cname <- names[i]
     gene_list[[cname]] <- cluster2_list[[baseline]]
   }
   
-  # confirm the number and elements
-  #a <- intersect(df1, df2)
-  
-  # upset(fromList(gene_list),  sets = set_type, keep.order = TRUE,
-  #       order.by = c("degree", "freq"), decreasing = c(TRUE, TRUE),  text.scale = 2)
-  # To save pdf
-
-  #pdf(paste0("./Figures/UpsetPlot_", target,".pdf",sep=""), 8,5)
+ 
   pdf(paste0("./Figures/Supp_Figure_10_UpsetPlot_", target,".pdf",sep=""), paper = "a4r", width = WIDTH, height = 5.5)
-  #upset(fromList(gene_list), order.by = c("freq","degree"), decreasing = c(TRUE, TRUE), text.scale = 2)
   a <- upset(fromList(gene_list),  sets = c("FR3033", "FR2326", "FR1619","FR912", "FR58", "FR14"), keep.order = TRUE,
         order.by = c("degree", "freq"), decreasing = c(TRUE, TRUE),  text.scale = 2)
   print(a)
   dev.off()
-  
-  # # To see length of each vector for the groups
-  # str(expressed)
+
 }
 
 
-Upset_plot(target = "MM", WIDTH = 8) # pdf 8, 5.5
-Upset_plot(target = "LV", WIDTH = 4) # pdf 4, 5.5
-Upset_plot(target = "LG", WIDTH = 8) # pdf 8, 5.5
+Upset_plot(target = "MM", WIDTH = 8) 
+Upset_plot(target = "LV", WIDTH = 4) 
+Upset_plot(target = "LG", WIDTH = 8) 
        

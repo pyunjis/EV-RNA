@@ -70,6 +70,7 @@ geneTable <- geneTable[geneTable$value>0,] # values with count
 
 # Let's filter out some biotypes so that we don't have such a messy graph
 ordered <- as.data.table(geneTable)[, .N, by = biotype][order(-N)]
+
 # Grab the first 6 options
 filtBio <- as.vector(ordered[5:1,]$biotype) # 6 types, # 6 types: Processed_transcript, transcribed_unprocessed_pseudogene, lincRNA, processed_pseudogene, lincRNA, antisesnse, protein_coding
 other <- as.vector(ordered[6:nrow(ordered)]$biotype) # 21 others
@@ -101,7 +102,7 @@ biotypeBar2 <- ggplot(geneTable, aes(x=variable, y=Frac, fill=biotype)) +
   ylab("Fraction of each biotype") +
   xlab("SampleID") +
   scale_fill_brewer( palette = "YlGnBu" ) +
-  theme(#text = element_text(family = "Arial"),
+  theme(
     plot.margin = unit(c(0.3,0.3,0.3,0.3),"cm"),
     axis.text.x=element_text(angle = 90, size = 25),
     axis.text.y=element_text(size=30),
@@ -120,8 +121,6 @@ protein_coding <- geneTable %>%
   filter(biotype == "protein coding")
 trans_pseudo <- geneTable %>%
   filter(biotype == "transcribed unprocessed pseudogene")
-# process_trans <- geneTable %>%
-#   filter(biotype == "processed transcript")
 process_pseudo <- geneTable %>%
   filter(biotype == "processed pseudogene")
 lincRNA <- geneTable %>%
@@ -138,14 +137,6 @@ max(protein_coding$Frac)
 mean(trans_pseudo$Frac)
 min(trans_pseudo$Frac)
 max(trans_pseudo$Frac)
-
-# mean(process_trans$Frac)
-# min(process_trans$Frac)
-# max(process_trans$Frac)
-# 
-# mean(trans_pseudo$Frac)
-# min(trans_pseudo$Frac)
-# max(trans_pseudo$Frac)
 
 mean(process_pseudo$Frac)
 min(process_pseudo$Frac)
@@ -165,9 +156,6 @@ max(other$Frac)
 
 
 pdf("Figures/Figure_2E_biotypes.pdf", width = 40, height = 10)
-
-
-#jpeg("Figures/Figure_2C_biotypes.jpg", width = 4000, height = 1000)
 print(biotypeBar2)
 dev.off()
 

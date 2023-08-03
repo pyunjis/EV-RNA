@@ -10,6 +10,7 @@ library(ggplot2)
 library(pheatmap)
 library(tidyverse)
 library(gplots)
+library(scales)
 
 # Set working directory
 setwd("E:/4. EV-RNA/4. EV-RNA/4. Code/2023-07-23 FINAL/")
@@ -52,7 +53,6 @@ RunHeatmap_top10 <- function(cluster, type, norm){
   md2$Fraction <- factor(md2$Fraction, levels = c("FR14", "FR58", "FR912", "FR1619", "FR2326", "FR3033"))
   md3 <- md2 %>%
     arrange(Fraction) 
-  #FR_levels <- md3$Fraction
   
   SampleID_levels <- md3$SampleID
 
@@ -70,14 +70,10 @@ RunHeatmap_top10 <- function(cluster, type, norm){
   gene_order$genes<- NULL
   rownames(gene_order) <- gene_order2$genes
   
-  #Cluster <- RColorBrewer::brewer.pal(5, "Set1")[c(1,2,3)]
-  library(scales)
-  #show_col(hue_pal()(12))
+  ## Generate palette and map this to each Condition, and to each Fraction
   cluster <- hue_pal()(12)
-  #cluster <- brewer.pal(6, "Set2")
   names(cluster) <- unique(as.character(gene_order$cluster))
   
-  ## Generate palette and map this to each Condition, and to each Fraction
   fractionCols <- brewer.pal(length(unique(md3$Fraction)), "Set1")
   names(fractionCols) <- unique(md3$Fraction)
   
@@ -88,10 +84,11 @@ RunHeatmap_top10 <- function(cluster, type, norm){
   cts5 <- cts4
   cts5 <- cts5[rownames(gene_order),]
   
-  # gene_order has to be a datframe
+  # gene_order has to be a dataframe
   df <- as.data.frame(gene_order)
   df$cluster<- as.character(df$cluster)
-  #pheatmap 
+  
+  # pheatmap 
   breaks <- seq(-2.5, 2.5, by =0.1)
 
   clusterHeat1 <- pheatmap(cts5, show_rownames=F, show_colnames=F,
@@ -117,7 +114,6 @@ RunHeatmap_top10 <- function(cluster, type, norm){
                            annotation_names_row = TRUE,
                            annotation_names_col = FALSE,
                            annotation_colors = annotColors,
-                           #cluster_rows = FALSE,
                            cluster_cols = FALSE,
                            color = colorRampPalette(c("white", "white", "black"))(50),
                            annotation_col = md3,
@@ -128,16 +124,9 @@ RunHeatmap_top10 <- function(cluster, type, norm){
   )
   
   
-  #pdf(paste0("./Figures/DEGpattern_top10_heatmap_ALL_color_cluster_minc0.pdf"), 6, 4)
-  #print(clusterHeat2)
-  #dev.off()
-  
 
   
 }
 
 RunHeatmap_top10(cluster = ALL_cluster, norm = ALL_norm)
-# RunHeatmap_top10(cluster = MM_cluster, type = "MM", norm = MM_norm)
-# RunHeatmap_top10(cluster = LG_cluster, type = "LG", norm = LG_norm)
-# RunHeatmap_top10(cluster = LCir_cluster, type = "LCir", norm = LCir_norm)
-# RunHeatmap_top10(cluster = MG_cluster, type = "MG", norm = MG_norm)
+

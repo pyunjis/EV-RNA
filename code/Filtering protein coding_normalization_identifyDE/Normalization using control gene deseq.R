@@ -56,7 +56,5 @@ dds <- DESeq(dds)
 deseq_norm2 <- counts(dds, normalized = TRUE)
 dim(deseq_norm2)
 
-#write.table(deseq_norm2, file="./df/set1df_unnorm_protein_coding_deseq_norm.txt", sep="\t", quote=F) 
-#write.table(deseq_norm2, file="./df/2022-01-27/set1df_unnorm_protein_coding_deseq_norm.txt", sep="\t", quote=F) 
 write.table(deseq_norm2, file="./Files/set1df_unnorm_protein_coding_deseq_norm.txt", sep="\t", quote=F) 
 
