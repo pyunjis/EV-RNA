@@ -5,3 +5,5 @@ This is a repository for processing cell-free RNA sequencing data from human pla
 
 * This is implemented in Snakemake for RNA sequencing data processing. 
 * All downstream scripts for generating figures are located in the `code/` directory.
+
+[![DOI](https://zenodo.org/badge/209364767.svg)](https://zenodo.org/badge/latestdoi/209364767)
